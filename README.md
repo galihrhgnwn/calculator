@@ -13,5 +13,5 @@
 ​Simply open the index.html file in your web browser. Alternatively, you can visit the live version hosted on GitHub Pages.
 
 # ​Author
-​This project was made by galihrhgnwn, a student from SMAN 1 Rupat.
+​This project was made by galihrhgnwn, a student from SMAN 1 Rupat. 
 ​Feel free to clone, fork, or contribute to this project!
