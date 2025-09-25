@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Mode Gelap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            touch-action: manipulation;
+        }
+        .calculator-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .calculator-button:active {
+            transform: scale(0.95);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        input[type=text]::-webkit-outer-spin-button,
+        input[type=text]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=text] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-sm mx-auto bg-gray-800 rounded-2xl shadow-2xl shadow-blue-500/20 p-6 border border-gray-700">
+        <div class="bg-gray-900 rounded-lg p-4 mb-6">
+            <input type="text" id="display" class="w-full bg-transparent text-right text-4xl md:text-5xl font-sans font-bold text-white border-none outline-none" readonly placeholder="0">
+        </div>
+
+        <div class="grid grid-cols-4 gap-4">
+            <button onclick="clearDisplay()" class="calculator-button text-2xl bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg shadow-md col-span-2">C</button>
+            <button onclick="deleteLast()" class="calculator-button text-2xl bg-gray-600 hover:bg-gray-500 text-white font-bold py-4 rounded-lg shadow-md">DEL</button>
+            <button onclick="appendToDisplay('÷')" class="calculator-button text-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 rounded-lg shadow-md">÷</button>
+
+            <button onclick="appendToDisplay('7')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">7</button>
+            <button onclick="appendToDisplay('8')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">8</button>
+            <button onclick="appendToDisplay('9')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">9</button>
+            <button onclick="appendToDisplay('×')" class="calculator-button text-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 rounded-lg shadow-md">×</button>
+
+            <button onclick="appendToDisplay('4')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">4</button>
+            <button onclick="appendToDisplay('5')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">5</button>
+            <button onclick="appendToDisplay('6')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">6</button>
+            <button onclick="appendToDisplay('-')" class="calculator-button text-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 rounded-lg shadow-md">-</button>
+
+            <button onclick="appendToDisplay('1')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">1</button>
+            <button onclick="appendToDisplay('2')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">2</button>
+            <button onclick="appendToDisplay('3')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">3</button>
+            <button onclick="appendToDisplay('+')" class="calculator-button text-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 rounded-lg shadow-md">+</button>
+
+            <button onclick="appendToDisplay('0')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md col-span-2">0</button>
+            <button onclick="appendToDisplay('.')" class="calculator-button text-2xl bg-gray-700 hover:bg-gray-600 text-gray-100 font-bold py-4 rounded-lg shadow-md">.</button>
+            <button onclick="calculateResult()" class="calculator-button text-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg shadow-md">=</button>
+        </div>
+    </div>
+
+    <div class="text-center mt-6">
+        <p class="text-gray-500 text-sm">Powered by @galihrhgnwn</p>
+        <p class="text-gray-600 text-xs">student from sman 1 rupat</p>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        function appendToDisplay(input) {
+            const lastChar = display.value.slice(-1);
+            const operators = ['+', '-', '×', '÷'];
+            if (operators.includes(lastChar) && operators.includes(input)) {
+                return;
+            }
+            const currentNumber = display.value.split(/[\+\-\×\÷]/).pop();
+            if (input === '.' && currentNumber.includes('.')) {
+                return;
+            }
+            display.value += input;
+        }
+
+        function clearDisplay() {
+            display.value = "";
+        }
+
+        function deleteLast() {
+            display.value = display.value.slice(0, -1);
+        }
+
+        function calculateResult() {
+            try {
+                let expression = display.value.replace(/×/g, '*').replace(/÷/g, '/');
+                expression = expression.replace(/--/g, '+');
+                
+                let result = eval(expression);
+
+                if (!isFinite(result)) {
+                    throw new Error("Hasil tidak valid");
+                }
+                
+                result = parseFloat(result.toFixed(10));
+                
+                display.value = result;
+            } catch (error) {
+                display.value = "Error";
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            if (key >= '0' && key <= '9' || key === '.') {
+                appendToDisplay(key);
+            } else if (key === '+' || key === '-') {
+                appendToDisplay(key);
+            } else if (key === '*') {
+                appendToDisplay('×');
+            } else if (key === '/') {
+                appendToDisplay('÷');
+            } else if (key === 'Enter' || key === '=') {
+                event.preventDefault();
+                calculateResult();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            } else if (key === 'Escape' || key.toLowerCase() === 'c') {
+                clearDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
